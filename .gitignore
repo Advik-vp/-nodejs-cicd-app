@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+dist/
+build/
+coverage/
+.jest_cache/
+*.log
+.vscode/settings.json
