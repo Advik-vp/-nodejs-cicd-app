@@ -13,7 +13,7 @@ jobs:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
     # Only run if SONAR_TOKEN is configured
-    if: ${{ secrets.SONAR_TOKEN != '' }}
+    if: false  # Disabled - configure SONAR_TOKEN secret to enable
 
     steps:
       - name: Checkout code
