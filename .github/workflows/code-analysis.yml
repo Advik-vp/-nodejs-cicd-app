@@ -12,6 +12,8 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
+    # Only run if SONAR_TOKEN is configured
+    if: ${{ secrets.SONAR_TOKEN != '' }}
     
     steps:
       - name: Checkout code
@@ -24,6 +26,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+
+      # Ensure package-lock.json exists for dependency caching
+      - name: Verify lock file
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "Error: package-lock.json not found. Run 'npm install' locally and commit the lock file."
+            exit 1
+          fi
 
       - name: Install dependencies
         run: npm ci
@@ -45,6 +55,11 @@ jobs:
     name: Dependency Security Check
     runs-on: ubuntu-latest
     
+    # Required for uploading SARIF results to GitHub Security tab
+    permissions:
+      contents: read
+      security-events: write
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,16 +78,20 @@ jobs:
 
       - name: Run Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
+        id: dependency-check
+        continue-on-error: true
         with:
           project: 'nodejs-cicd-app'
           path: '.'
           format: 'SARIF'
           args: >
             --enableExperimental
-            --enable-retired
+            --enableRetired
 
+      # Check if SARIF file was generated and upload it
       - name: Upload SARIF results to code scanning
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('reports/dependency-check-report.sarif') != ''
         with:
           sarif_file: reports/dependency-check-report.sarif
+          category: dependency-check

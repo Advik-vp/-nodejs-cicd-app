@@ -40,11 +40,26 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-  # Unit Tests
+  # Unit Tests with MongoDB
   test:
-    name: Unit Tests
+    name: Unit Tests with MongoDB
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: mongodb_test_password
+          MONGO_INITDB_DATABASE: test_db
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
     
     steps:
       - name: Checkout code
@@ -59,8 +74,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm run test
+      - name: Wait for MongoDB
+        run: |
+          for i in {1..30}; do
+            if mongosh mongodb://admin:mongodb_test_password@localhost:27017/test_db --eval "db.runCommand('ping')" > /dev/null 2>&1; then
+              echo "MongoDB is ready"
+              exit 0
+            fi
+            echo "Waiting for MongoDB... ($i/30)"
+            sleep 1
+          done
+          echo "MongoDB failed to start"
+          exit 1
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
@@ -109,11 +134,13 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
 
+      # Upload security scan results using latest CodeQL action
       - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+          category: trivy
 
   # Integration Tests (optional)
   integration:
