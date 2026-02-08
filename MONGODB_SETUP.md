@@ -3,17 +3,20 @@
 ## 1. Context & Assumptions
 
 ### Target Environment
+
 - **Primary OS**: Windows (PowerShell), Linux (Bash), macOS
 - **Node.js**: v16+ (compatible with current project)
 - **Package Managers**: npm, apt (Ubuntu/Debian), homebrew (macOS), Chocolatey (Windows)
 - **Runtime**: Node.js with Express.js framework
 
 ### MongoDB Setup Type
+
 - **Development**: Local MongoDB Community Edition
 - **CI/CD**: Docker-based MongoDB (containerized)
 - **Production**: Can be extended to MongoDB Atlas or managed services
 
 ### MongoDB Version
+
 - **Target Version**: MongoDB 7.0 LTS (stable, widely supported)
 - **Edition**: Community Edition (free, open-source)
 - **Drivers**: Compatible with Node.js 16+
@@ -24,36 +27,36 @@
 
 ### Runtime Dependencies (Production)
 
-| Package | Version | Purpose | Required |
-|---------|---------|---------|----------|
-| `mongodb` | `^6.3.0` | Official Node.js MongoDB driver | Yes |
-| `mongoose` | `^8.0.0` | ODM (Object Document Mapper) | Optional* |
-| `dotenv` | `^16.3.1` | Environment variable management | Yes |
+| Package    | Version   | Purpose                         | Required   |
+| ---------- | --------- | ------------------------------- | ---------- |
+| `mongodb`  | `^6.3.0`  | Official Node.js MongoDB driver | Yes        |
+| `mongoose` | `^8.0.0`  | ODM (Object Document Mapper)    | Optional\* |
+| `dotenv`   | `^16.3.1` | Environment variable management | Yes        |
 
-*Mongoose adds abstraction and schema validation; use if you prefer structured models.
+\*Mongoose adds abstraction and schema validation; use if you prefer structured models.
 
 ### Development & Testing Dependencies
 
-| Package | Version | Purpose | Required |
-|---------|---------|---------|----------|
-| `mongodb-memory-server` | `^9.1.0` | In-memory MongoDB for tests | Recommended |
-| `jest` | `^29.7.0` | Already installed | Yes |
-| `@types/node` | `^20.0.0` | TypeScript types (optional) | Optional |
+| Package                 | Version   | Purpose                     | Required    |
+| ----------------------- | --------- | --------------------------- | ----------- |
+| `mongodb-memory-server` | `^9.1.0`  | In-memory MongoDB for tests | Recommended |
+| `jest`                  | `^29.7.0` | Already installed           | Yes         |
+| `@types/node`           | `^20.0.0` | TypeScript types (optional) | Optional    |
 
 ### System/Database Tools
 
-| Tool | Version | Purpose | Installation |
-|------|---------|---------|--------------|
-| MongoDB Community Server | 7.0+ | Database engine | System package/Docker |
-| mongosh | 2.0+ | MongoDB shell client | npm or system package |
-| MongoDB Compass | Latest | GUI client (optional) | Download or package manager |
+| Tool                     | Version | Purpose               | Installation                |
+| ------------------------ | ------- | --------------------- | --------------------------- |
+| MongoDB Community Server | 7.0+    | Database engine       | System package/Docker       |
+| mongosh                  | 2.0+    | MongoDB shell client  | npm or system package       |
+| MongoDB Compass          | Latest  | GUI client (optional) | Download or package manager |
 
 ### Container Approach (Recommended for CI/CD)
 
-| Component | Version | Purpose |
-|-----------|---------|---------|
-| MongoDB Image | `mongo:7.0` | Docker official image |
-| mongo-express | `latest` | Web UI for MongoDB (optional) |
+| Component     | Version     | Purpose                       |
+| ------------- | ----------- | ----------------------------- |
+| MongoDB Image | `mongo:7.0` | Docker official image         |
+| mongo-express | `latest`    | Web UI for MongoDB (optional) |
 
 ---
 
@@ -156,6 +159,7 @@ sudo systemctl enable mongod
 ### C. MongoDB Shell (mongosh) Installation
 
 #### Windows
+
 ```powershell
 choco install mongosh -y
 # OR
@@ -163,11 +167,13 @@ npm install -g mongosh
 ```
 
 #### macOS
+
 ```bash
 brew install mongosh
 ```
 
 #### Linux (Ubuntu/Debian)
+
 ```bash
 curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
@@ -188,7 +194,7 @@ services:
     container_name: mongodb-dev
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password123}
@@ -209,12 +215,12 @@ services:
     container_name: mongodb-ui
     restart: unless-stopped
     ports:
-      - "8081:8081"
+      - '8081:8081'
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD:-password123}
       ME_CONFIG_MONGODB_URL: mongodb://admin:${MONGO_PASSWORD:-password123}@mongodb:27017/
-      ME_CONFIG_BASICAUTH: "false"
+      ME_CONFIG_BASICAUTH: 'false'
     depends_on:
       - mongodb
     networks:
@@ -256,6 +262,7 @@ docker-compose down -v
 ### A. Verify MongoDB Installation
 
 #### Windows (PowerShell)
+
 ```powershell
 # Check if MongoDB service is running
 Get-Service MongoDB
@@ -266,6 +273,7 @@ mongosh --version
 ```
 
 #### macOS/Linux (Bash)
+
 ```bash
 # Check MongoDB service status
 sudo systemctl status mongod
@@ -280,6 +288,7 @@ mongo --version
 ### B. Connection Tests
 
 #### Test with mongosh CLI
+
 ```bash
 # Default connection (no authentication)
 mongosh mongodb://localhost:27017
@@ -304,11 +313,11 @@ async function testConnection() {
   try {
     await client.connect();
     console.log('✅ MongoDB connected successfully');
-    
+
     // Ping test
     const result = await client.db('admin').command({ ping: 1 });
     console.log('✅ Ping response:', result);
-    
+
     // List databases
     const databases = await client.db('admin').admin().listDatabases();
     console.log('✅ Databases:', databases.databases.length);
@@ -323,6 +332,7 @@ testConnection();
 ```
 
 Run test:
+
 ```bash
 node test-mongodb-connection.js
 ```
@@ -338,10 +348,10 @@ async function healthCheck() {
   try {
     const startTime = Date.now();
     await client.connect();
-    
+
     const result = await client.db('admin').command({ ping: 1 });
     const responseTime = Date.now() - startTime;
-    
+
     console.log(`✅ MongoDB Health Check Passed (${responseTime}ms)`);
     console.log('Response:', result);
   } catch (error) {
@@ -386,6 +396,7 @@ const client = new MongoClient(MONGO_URI);
 ### B. Environment Variables
 
 Create `.env` file:
+
 ```env
 MONGO_URI=mongodb://admin:secure_password@localhost:27017/app_db
 MONGO_PASSWORD=secure_password
@@ -394,6 +405,7 @@ PORT=3000
 ```
 
 Load in application:
+
 ```javascript
 import dotenv from 'dotenv';
 dotenv.config();
@@ -405,7 +417,8 @@ const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017';
 
 ```javascript
 // Secure connection with TLS
-const MONGO_URI = 'mongodb+srv://user:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority&tls=true';
+const MONGO_URI =
+  'mongodb+srv://user:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority&tls=true';
 
 const client = new MongoClient(MONGO_URI, {
   tlsCAFile: process.env.MONGO_CA_FILE,
@@ -472,7 +485,7 @@ npm ci
 # Use specific version tags (not 'latest')
 services:
   mongodb:
-    image: mongo:7.0.3  # Specific version, not mongo:7.0
+    image: mongo:7.0.3 # Specific version, not mongo:7.0
 ```
 
 ### C. Node.js Version Lock
@@ -483,6 +496,7 @@ services:
 ```
 
 Install specified version:
+
 ```bash
 nvm install
 nvm use
@@ -497,6 +511,7 @@ nvm use
 **Cause**: MongoDB service not running
 
 **Solution**:
+
 ```bash
 # Windows
 Start-Service mongod
@@ -511,6 +526,7 @@ sudo systemctl start mongod
 ### Issue 2: "Authentication failed"
 
 **Solution**:
+
 ```bash
 # Verify credentials
 mongosh "mongodb://admin:password@localhost:27017/admin"
@@ -524,6 +540,7 @@ db.changeUserPassword("admin", "new_password")
 ### Issue 3: "Port 27017 already in use"
 
 **Solution**:
+
 ```bash
 # Windows
 Get-NetTCPConnection -LocalPort 27017
@@ -540,6 +557,7 @@ mongod --port 27018
 ### Issue 4: Docker MongoDB connection timeout
 
 **Solution**:
+
 ```bash
 # Check container logs
 docker-compose logs mongodb
@@ -554,6 +572,7 @@ docker-compose ps
 ### Issue 5: "Out of memory" errors
 
 **Solution**:
+
 - Increase system RAM or Docker memory limit
 - Reduce data retention policies
 - Enable compression
@@ -621,4 +640,3 @@ export function getDatabase() {
 - [MongoDB Node.js Driver Docs](https://www.mongodb.com/docs/drivers/node/)
 - [Mongoose Documentation](https://mongoosejs.com/)
 - [MongoDB Atlas (Managed Service)](https://www.mongodb.com/cloud/atlas)
-

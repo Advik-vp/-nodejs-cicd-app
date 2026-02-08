@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only run if SONAR_TOKEN is configured
     if: ${{ secrets.SONAR_TOKEN != '' }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,12 +54,12 @@ jobs:
   dependency-check:
     name: Dependency Security Check
     runs-on: ubuntu-latest
-    
+
     # Required for uploading SARIF results to GitHub Security tab
     permissions:
       contents: read
       security-events: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

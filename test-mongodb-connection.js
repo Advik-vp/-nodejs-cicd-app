@@ -1,9 +1,9 @@
 /**
  * MongoDB Connection Test Script
- * 
+ *
  * This script tests the MongoDB connection from your Node.js application
  * and validates that all dependencies are properly configured.
- * 
+ *
  * Usage: node test-mongodb-connection.js
  */
 
@@ -90,10 +90,10 @@ async function testConnection() {
     // Test 4: Test Database Operations
     logInfo('Test 4: Testing basic database operations...');
     const testDb = client.db(MONGO_DB_NAME);
-    
+
     // Create a collection
     const collection = testDb.collection('test_collection');
-    
+
     // Insert document
     const insertResult = await collection.insertOne({
       test: 'MongoDB Connection Test',
@@ -140,7 +140,6 @@ async function testConnection() {
     log('\nConnection Details:', 'bright');
     log(`  URI: ${MONGO_URI.replace(/:[^@]*@/, ':****@')}`, 'dim');
     log(`  Database: ${MONGO_DB_NAME}`, 'dim');
-
   } catch (error) {
     // Error handling
     logError(`Test failed: ${error.message}`);

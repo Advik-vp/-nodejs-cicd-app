@@ -5,6 +5,7 @@
 ### 1. System Requirements
 
 **Windows:**
+
 ```powershell
 # Install Chocolatey (if not already installed)
 Set-ExecutionPolicy Bypass -Scope Process -Force; `
@@ -16,11 +17,13 @@ choco install nodejs git docker-desktop
 ```
 
 **macOS:**
+
 ```bash
 brew install node@20 git docker
 ```
 
 **Linux (Ubuntu/Debian):**
+
 ```bash
 sudo apt update
 sudo apt install -y nodejs npm git docker.io docker-compose
@@ -114,6 +117,7 @@ For production deployments, add secrets to your GitHub repository:
 **Settings → Secrets and variables → Actions → New repository secret**
 
 Required secrets:
+
 ```
 SLACK_WEBHOOK        # For notifications
 SONAR_TOKEN          # For code analysis
@@ -188,6 +192,7 @@ Adjust based on your project's quality standards.
 ### ESLint Rules (.eslintrc.json)
 
 Key rules enforced:
+
 - `no-console`: Prevents debugging logs in production
 - `no-unused-vars`: Catches unused variables
 - `no-var`: Enforces const/let usage
@@ -211,6 +216,7 @@ git push origin feature/my-feature
 ### 2. Code Review & Merge
 
 When PR is created:
+
 - Automated checks run (linting, tests, security)
 - Request code review from team
 - After approval, merge to develop
@@ -232,6 +238,7 @@ git push origin v1.0.0
 ## Environment-Specific Configuration
 
 ### Development (.env)
+
 ```
 NODE_ENV=development
 LOG_LEVEL=debug
@@ -239,6 +246,7 @@ DATABASE_URL=postgresql://localhost/appdb
 ```
 
 ### Staging (GitHub Secrets)
+
 ```
 NODE_ENV=staging
 LOG_LEVEL=info
@@ -246,6 +254,7 @@ DATABASE_URL=<staging-db-url>
 ```
 
 ### Production (GitHub Secrets + Manual)
+
 ```
 NODE_ENV=production
 LOG_LEVEL=warn
@@ -285,6 +294,7 @@ In CI/CD pipeline (add to `.github/workflows/ci-cd.yml`):
    - Scope: `write:packages`, `read:packages`, `delete:packages`
 
 2. Login locally:
+
    ```bash
    docker login ghcr.io -u USERNAME -p TOKEN
    ```
@@ -314,6 +324,7 @@ git commit -m "fix: issue"
 ```
 
 To skip hooks (not recommended):
+
 ```bash
 git commit --no-verify
 ```

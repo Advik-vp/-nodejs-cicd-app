@@ -18,7 +18,7 @@ jobs:
     name: Code Quality Checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
     name: Unit Tests with MongoDB
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     services:
       mongodb:
         image: mongo:7.0
@@ -60,7 +60,7 @@ jobs:
           --health-retries 5
         ports:
           - 27017:27017
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: [quality, test]
-    
+
     services:
       postgres:
         image: postgres:15-alpine
@@ -197,7 +197,7 @@ jobs:
     needs: [build, integration]
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     timeout-minutes: 20
-    
+
     environment:
       name: staging
       url: https://staging.example.com
@@ -227,7 +227,7 @@ jobs:
     needs: [build, integration]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     timeout-minutes: 20
-    
+
     environment:
       name: production
       url: https://example.com

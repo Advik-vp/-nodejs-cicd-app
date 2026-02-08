@@ -20,6 +20,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Core MongoDB Driver
 
 - [ ] `mongodb@^6.3.0` installed
+
   ```bash
   npm list mongodb
   ```
@@ -39,11 +40,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Development Dependencies
 
 - [ ] `mongodb-memory-server@^9.1.0` installed
+
   ```bash
   npm list --save-dev mongodb-memory-server
   ```
 
 - [ ] `@types/node` installed
+
   ```bash
   npm list --save-dev @types/node
   ```
@@ -60,18 +63,21 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Windows
 
 - [ ] MongoDB Community Edition installed
+
   ```powershell
   Get-Command mongosh
   mongosh --version
   ```
 
 - [ ] MongoDB service installed and running
+
   ```powershell
   Get-Service MongoDB
   Get-Service mongod
   ```
 
 - [ ] Data directory exists at `C:\Data\MongoDB`
+
   ```powershell
   Test-Path "C:\Data\MongoDB"
   ```
@@ -84,16 +90,19 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### macOS
 
 - [ ] Homebrew installed
+
   ```bash
   brew --version
   ```
 
 - [ ] MongoDB Community Edition installed
+
   ```bash
   brew list | grep mongodb
   ```
 
 - [ ] MongoDB service running
+
   ```bash
   brew services list | grep mongodb
   ```
@@ -106,16 +115,19 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Linux (Ubuntu/Debian)
 
 - [ ] MongoDB repository added
+
   ```bash
   cat /etc/apt/sources.list.d/mongodb-org-7.0.list
   ```
 
 - [ ] MongoDB Community Edition installed
+
   ```bash
   dpkg -l | grep mongodb-org
   ```
 
 - [ ] MongoDB service running
+
   ```bash
   sudo systemctl status mongod
   ```
@@ -128,11 +140,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Linux (CentOS/RHEL)
 
 - [ ] MongoDB repository added
+
   ```bash
   cat /etc/yum.repos.d/mongodb-org-7.0.repo
   ```
 
 - [ ] MongoDB Community Edition installed
+
   ```bash
   yum list installed | grep mongodb
   ```
@@ -149,12 +163,14 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### CLI Connection Test
 
 - [ ] Connect via mongosh without authentication
+
   ```bash
   mongosh mongodb://localhost:27017
   > db.runCommand('ping')
   ```
 
 - [ ] Connection returns successful ping response
+
   ```
   { ok: 1 }
   ```
@@ -167,11 +183,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Node.js Application Connection
 
 - [ ] Create test file: `test-mongodb-connection.js`
+
   ```bash
   [ -f test-mongodb-connection.js ]
   ```
 
 - [ ] Run connection test successfully
+
   ```bash
   node test-mongodb-connection.js
   ```
@@ -185,6 +203,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Authentication Setup
 
 - [ ] Admin user created in MongoDB
+
   ```bash
   mongosh
   > use admin
@@ -192,6 +211,7 @@ A quick reference checklist for verifying MongoDB installation completion.
   ```
 
 - [ ] Authentication enabled in MongoDB config
+
   ```bash
   # Check mongod configuration
   grep "security:" /etc/mongod.conf
@@ -205,16 +225,19 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Environment Variables
 
 - [ ] `.env` file created in project root
+
   ```bash
   [ -f .env ]
   ```
 
 - [ ] `.env` file added to `.gitignore`
+
   ```bash
   grep "^\.env$" .gitignore
   ```
 
 - [ ] `.env` contains all required variables
+
   ```env
   MONGO_URI=...
   MONGO_DB_NAME=...
@@ -236,6 +259,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Docker Installation
 
 - [ ] Docker Desktop installed
+
   ```bash
   docker --version
   ```
@@ -248,11 +272,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Docker Compose Configuration
 
 - [ ] `docker-compose.yml` file exists
+
   ```bash
   [ -f docker-compose.yml ]
   ```
 
 - [ ] MongoDB service defined in docker-compose.yml
+
   ```bash
   grep "image: mongo:" docker-compose.yml
   ```
@@ -265,12 +291,14 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Docker Container Management
 
 - [ ] MongoDB container runs successfully
+
   ```bash
   docker-compose up -d
   docker-compose ps
   ```
 
 - [ ] Container health check passes
+
   ```bash
   docker-compose ps | grep healthy
   ```
@@ -287,11 +315,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Dependencies Lock
 
 - [ ] `package-lock.json` generated
+
   ```bash
   [ -f package-lock.json ]
   ```
 
 - [ ] `package-lock.json` committed to git
+
   ```bash
   git ls-files | grep package-lock.json
   ```
@@ -315,6 +345,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### MongoDB Client Module
 
 - [ ] Database connection module created
+
   ```bash
   [ -f src/mongodb-client.js ]
   ```
@@ -327,11 +358,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Application Setup
 
 - [ ] MongoDB connection initialized on app startup
+
   ```bash
   grep -r "connectDatabase" src/
   ```
 
 - [ ] Environment variables loaded
+
   ```bash
   grep "dotenv.config" src/
   ```
@@ -348,11 +381,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Unit Tests
 
 - [ ] Test file exists: `tests/mongodb.test.js`
+
   ```bash
   [ -f tests/mongodb.test.js ]
   ```
 
 - [ ] Tests pass locally
+
   ```bash
   npm test -- mongodb.test.js
   ```
@@ -365,11 +400,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Health Checks
 
 - [ ] Health check endpoint defined
+
   ```bash
   grep -r "/health" src/
   ```
 
 - [ ] Health check includes database connectivity
+
   ```bash
   grep -A 5 "GET /health" src/
   ```
@@ -386,6 +423,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Connection Metrics
 
 - [ ] Connection timeout configured
+
   ```bash
   grep "serverSelectionTimeoutMS" src/
   ```
@@ -398,6 +436,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Logging
 
 - [ ] MongoDB operations logged
+
   ```bash
   grep -r "console.log\|logger" src/
   ```
@@ -414,11 +453,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Connection Issues
 
 - [ ] MongoDB service is running
+
   ```bash
   mongosh --eval "db.runCommand('ping')"
   ```
 
 - [ ] Correct port 27017 (or custom port) in connection string
+
   ```bash
   echo $MONGO_URI | grep 27017
   ```
@@ -432,6 +473,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Authentication Issues
 
 - [ ] Credentials correct in connection string
+
   ```bash
   mongosh "mongodb://admin:password@localhost:27017/admin"
   ```
@@ -444,6 +486,7 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Performance Issues
 
 - [ ] MongoDB memory usage acceptable
+
   ```bash
   # Check process memory
   # Windows: Get-Process mongod | Select-Object WorkingSet
@@ -462,16 +505,19 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### GitHub Actions / CI Pipeline
 
 - [ ] MongoDB service container defined in workflow
+
   ```bash
   grep -r "image: mongo:" .github/
   ```
 
 - [ ] Connection string configured for CI environment
+
   ```bash
   grep -r "MONGO_URI" .github/
   ```
 
 - [ ] Tests run against MongoDB in CI
+
   ```bash
   grep -r "npm test" .github/
   ```
@@ -484,11 +530,13 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Docker Build Pipeline
 
 - [ ] Dockerfile includes MongoDB client installation
+
   ```bash
   grep -i "mongodb\|mongosh" Dockerfile
   ```
 
 - [ ] Node.js dependencies installed in Docker
+
   ```bash
   grep "npm install" Dockerfile
   ```
@@ -505,17 +553,20 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Project Documentation
 
 - [ ] MongoDB setup guide created
+
   ```bash
   [ -f MONGODB_SETUP.md ]
   ```
 
 - [ ] Installation scripts provided
+
   ```bash
   [ -f scripts/install-mongodb-*.sh ]
   [ -f scripts/install-mongodb-*.ps1 ]
   ```
 
 - [ ] README includes MongoDB setup section
+
   ```bash
   grep -i "mongodb" README.md
   ```
@@ -532,21 +583,25 @@ A quick reference checklist for verifying MongoDB installation completion.
 ### Complete System Test
 
 - [ ] All npm packages installed
+
   ```bash
   npm list | grep mongodb
   ```
 
 - [ ] MongoDB service running
+
   ```bash
   mongosh --eval "db.runCommand('ping')"
   ```
 
 - [ ] Node.js application connects successfully
+
   ```bash
   node test-mongodb-connection.js
   ```
 
 - [ ] Tests pass
+
   ```bash
   npm test
   ```
@@ -566,11 +621,12 @@ A quick reference checklist for verifying MongoDB installation completion.
 - [ ] Team/stakeholders notified of completion
 - [ ] Ready for development/deployment
 
-**Date Completed**: _______________
+**Date Completed**: ******\_\_\_******
 
-**Completed By**: _______________
+**Completed By**: ******\_\_\_******
 
-**Notes/Issues**: 
+**Notes/Issues**:
+
 ```
 [List any issues or special configurations here]
 ```
@@ -583,4 +639,3 @@ A quick reference checklist for verifying MongoDB installation completion.
 - **Node.js Driver**: https://www.mongodb.com/docs/drivers/node/
 - **Troubleshooting**: See MONGODB_SETUP.md - Section 7
 - **Installation Scripts**: See `scripts/` directory
-

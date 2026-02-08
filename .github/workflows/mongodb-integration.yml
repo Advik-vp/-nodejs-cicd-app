@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
 
 env:
   NODE_VERSION: '20'
@@ -19,7 +19,7 @@ jobs:
     name: MongoDB Integration & Connection Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    
+
     services:
       mongodb:
         image: mongo:7.0
@@ -85,23 +85,23 @@ jobs:
           mongosh $MONGO_URI <<EOF
           // List databases
           show dbs
-          
+
           // Check connection
           db.runCommand('ping')
-          
+
           // Create test collection
           db.createCollection("ci_test_collection")
-          
+
           // Insert test document
           db.ci_test_collection.insertOne({
             test: "CI/CD Integration",
             timestamp: new Date(),
             status: "success"
           })
-          
+
           // Verify insert
           db.ci_test_collection.findOne()
-          
+
           // Clean up
           db.ci_test_collection.deleteMany({})
           EOF
@@ -119,7 +119,7 @@ jobs:
     name: MongoDB Performance Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     services:
       mongodb:
         image: mongo:7.0
@@ -159,11 +159,11 @@ jobs:
       - name: Performance Test
         run: |
           echo "Starting MongoDB Performance Tests..."
-          
+
           mongosh mongodb://admin:mongodb_perf_test@localhost:27017/perf_db <<EOF
           // Create performance test collection
           db.perf_test.deleteMany({})
-          
+
           // Bulk insert performance test
           const start = new Date()
           const docs = []
@@ -174,21 +174,21 @@ jobs:
               data: "Performance test document " + i
             })
           }
-          
+
           db.perf_test.insertMany(docs)
           const insertTime = new Date() - start
-          
+
           console.log("✅ Inserted 1000 documents in " + insertTime + "ms")
           console.log("Average per document: " + (insertTime / 1000).toFixed(2) + "ms")
-          
+
           // Query performance test
           const queryStart = new Date()
           const results = db.perf_test.find({ index: { \$gte: 500 } }).toArray()
           const queryTime = new Date() - queryStart
-          
+
           console.log("✅ Queried 500 documents in " + queryTime + "ms")
           console.log("Found: " + results.length + " documents")
-          
+
           // Cleanup
           db.perf_test.deleteMany({})
           EOF
@@ -198,7 +198,7 @@ jobs:
     name: MongoDB Backup Verification
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     services:
       mongodb:
         image: mongo:7.0

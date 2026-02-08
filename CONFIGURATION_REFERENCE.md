@@ -3,6 +3,7 @@
 ## Environment Variables
 
 ### Development (`.env`)
+
 ```bash
 NODE_ENV=development
 PORT=3000
@@ -12,6 +13,7 @@ API_SECRET=dev-secret-key
 ```
 
 ### Staging (GitHub Secrets)
+
 ```
 NODE_ENV=staging
 PORT=3000
@@ -22,6 +24,7 @@ SLACK_WEBHOOK=<webhook-url>
 ```
 
 ### Production (GitHub Secrets - Encrypted)
+
 ```
 NODE_ENV=production
 PORT=3000
@@ -40,13 +43,13 @@ Navigate to: **Repository Settings → Secrets and variables → Actions**
 
 ### Essential Secrets
 
-| Secret | Purpose | Example |
-|--------|---------|---------|
-| `DATABASE_URL` | Production database connection | `postgresql://user:pass@host:5432/db` |
-| `API_SECRET` | JWT/API authentication key | `your-256-bit-secret-key` |
-| `SLACK_WEBHOOK` | Slack notifications | `https://hooks.slack.com/services/T.../B.../X...` |
-| `SONAR_TOKEN` | SonarCloud analysis token | `squ_xxxxxxxxxxxxx` |
-| `DOCKER_REGISTRY_PAT` | Docker Hub/GHCR token | `ghp_xxxxxxxxxxxxx` |
+| Secret                | Purpose                        | Example                                           |
+| --------------------- | ------------------------------ | ------------------------------------------------- |
+| `DATABASE_URL`        | Production database connection | `postgresql://user:pass@host:5432/db`             |
+| `API_SECRET`          | JWT/API authentication key     | `your-256-bit-secret-key`                         |
+| `SLACK_WEBHOOK`       | Slack notifications            | `https://hooks.slack.com/services/T.../B.../X...` |
+| `SONAR_TOKEN`         | SonarCloud analysis token      | `squ_xxxxxxxxxxxxx`                               |
+| `DOCKER_REGISTRY_PAT` | Docker Hub/GHCR token          | `ghp_xxxxxxxxxxxxx`                               |
 
 ### Setting Up Slack Webhook
 
@@ -72,18 +75,18 @@ Navigate to: **Repository Settings → Secrets and variables → Actions**
 
 ```yaml
 # In .github/workflows/ci-cd.yml
-  quality:
-    steps:
-      - name: Run custom linter
-        run: npm run custom:lint
-        continue-on-error: false  # Fail if this fails
+quality:
+  steps:
+    - name: Run custom linter
+      run: npm run custom:lint
+      continue-on-error: false # Fail if this fails
 ```
 
 ### Modify notification triggers
 
 ```yaml
 - name: Slack notification
-  if: always()  # Always notify
+  if: always() # Always notify
   # if: failure()  # Only notify on failure
   # if: success()  # Only notify on success
 ```
@@ -93,7 +96,7 @@ Navigate to: **Repository Settings → Secrets and variables → Actions**
 ```yaml
 jobs:
   build:
-    timeout-minutes: 20  # Job timeout
+    timeout-minutes: 20 # Job timeout
 ```
 
 ---
@@ -103,11 +106,13 @@ jobs:
 If using Docker Hub instead of GHCR:
 
 1. Login:
+
    ```bash
    docker login -u USERNAME
    ```
 
 2. Update `.github/workflows/docker-publish.yml`:
+
    ```yaml
    env:
      REGISTRY: docker.io
@@ -143,6 +148,7 @@ deploy:
 ### Concurrent Job Limits
 
 Settings → Actions → General → Concurrency:
+
 ```yaml
 concurrency:
   group: ci-${{ github.ref }}
@@ -156,6 +162,7 @@ concurrency:
 ### Python Project
 
 **Key differences in workflows:**
+
 ```yaml
 - uses: actions/setup-python@v4
   with:

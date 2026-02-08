@@ -1,6 +1,6 @@
 /**
  * MongoDB Client Module
- * 
+ *
  * Handles MongoDB connection pooling and database access
  * for the application
  */
@@ -31,7 +31,7 @@ export async function connectDatabase() {
 
   try {
     console.log('[MongoDB] Connecting to MongoDB...');
-    
+
     mongoClient = new MongoClient(MONGO_URI, {
       maxPoolSize: MONGO_MAX_POOL_SIZE,
       minPoolSize: MONGO_MIN_POOL_SIZE,
@@ -44,10 +44,10 @@ export async function connectDatabase() {
     db = mongoClient.db(MONGO_DB_NAME);
 
     // Verify connection
-    const pingResult = await db.admin().command({ ping: 1 });
+    await db.admin().command({ ping: 1 });
     console.log('[MongoDB] ✅ Connected successfully');
     console.log('[MongoDB] Database:', MONGO_DB_NAME);
-    
+
     return mongoClient;
   } catch (error) {
     console.error('[MongoDB] ❌ Connection failed:', error.message);

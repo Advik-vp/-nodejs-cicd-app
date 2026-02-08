@@ -3,11 +3,13 @@
 ## 🚀 Quick Start (5 minutes)
 
 ### 1. NPM Dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Start MongoDB
+
 ```bash
 # Option A: Local Installation
 mongod
@@ -17,11 +19,13 @@ docker-compose up -d
 ```
 
 ### 3. Test Connection
+
 ```bash
 node test-mongodb-connection.js
 ```
 
 ### 4. Run Application
+
 ```bash
 npm run dev
 ```
@@ -31,6 +35,7 @@ npm run dev
 ## 📋 Installation by Platform
 
 ### Windows PowerShell
+
 ```powershell
 # Run as Administrator
 Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -38,6 +43,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 ```
 
 ### macOS / Linux (Bash)
+
 ```bash
 bash scripts/install-mongodb-unix.sh
 ```
@@ -47,6 +53,7 @@ bash scripts/install-mongodb-unix.sh
 ## 🔍 Common Commands
 
 ### Verify Installation
+
 ```bash
 mongosh --version
 mongosh --eval "db.runCommand('ping')"
@@ -55,6 +62,7 @@ mongosh --eval "db.runCommand('ping')"
 ### Service Management
 
 **Windows:**
+
 ```powershell
 Get-Service mongod
 Start-Service mongod
@@ -62,6 +70,7 @@ Stop-Service mongod
 ```
 
 **macOS:**
+
 ```bash
 brew services start mongodb-community
 brew services stop mongodb-community
@@ -69,6 +78,7 @@ brew services list
 ```
 
 **Linux:**
+
 ```bash
 sudo systemctl start mongod
 sudo systemctl stop mongod
@@ -76,6 +86,7 @@ sudo systemctl status mongod
 ```
 
 ### Docker Commands
+
 ```bash
 # Start services
 docker-compose up -d
@@ -98,16 +109,19 @@ docker-compose exec mongodb mongosh
 ## 🧪 Testing
 
 ### Connection Test
+
 ```bash
 node test-mongodb-connection.js
 ```
 
 ### Unit Tests
+
 ```bash
 npm test -- mongodb.test.js
 ```
 
 ### Health Check Endpoint
+
 ```bash
 curl http://localhost:3000/health
 ```
@@ -117,6 +131,7 @@ curl http://localhost:3000/health
 ## 🔐 Security
 
 ### Set Environment Variables
+
 ```bash
 # Copy example
 cp .env.example .env
@@ -127,12 +142,14 @@ notepad .env  # Windows
 ```
 
 ### Required Credentials
+
 ```env
 MONGO_URI=mongodb://admin:your_password@localhost:27017/app_db
 MONGO_PASSWORD=your_secure_password
 ```
 
 ### Never Commit
+
 ```bash
 # .gitignore should contain:
 .env
@@ -164,6 +181,7 @@ docker-compose ps
 ## 📊 Database Management
 
 ### Access mongosh
+
 ```bash
 # Local connection
 mongosh
@@ -176,6 +194,7 @@ docker-compose exec mongodb mongosh
 ```
 
 ### Common mongosh Commands
+
 ```javascript
 // Show all databases
 show dbs
@@ -204,6 +223,7 @@ db.users.drop()
 ## ⚠️ Troubleshooting
 
 ### Connection Refused
+
 ```bash
 # Check if MongoDB is running
 mongosh --eval "db.runCommand('ping')"
@@ -214,6 +234,7 @@ docker-compose up -d  # Docker
 ```
 
 ### Authentication Failed
+
 ```bash
 # Verify connection string
 echo $MONGO_URI
@@ -223,6 +244,7 @@ mongosh "mongodb://admin:password@localhost:27017/admin"
 ```
 
 ### Port Already in Use
+
 ```bash
 # Windows
 netstat -ano | findstr :27017
@@ -238,16 +260,19 @@ sudo lsof -i :27017
 ## 📚 API Examples
 
 ### GET /health
+
 ```bash
 curl http://localhost:3000/health
 ```
 
 ### GET /api/users
+
 ```bash
 curl http://localhost:3000/api/users
 ```
 
 ### POST /api/users
+
 ```bash
 curl -X POST http://localhost:3000/api/users \
   -H "Content-Type: application/json" \
@@ -255,11 +280,13 @@ curl -X POST http://localhost:3000/api/users \
 ```
 
 ### GET /api/users/:id
+
 ```bash
 curl http://localhost:3000/api/users/[USER_ID]
 ```
 
 ### PUT /api/users/:id
+
 ```bash
 curl -X PUT http://localhost:3000/api/users/[USER_ID] \
   -H "Content-Type: application/json" \
@@ -267,6 +294,7 @@ curl -X PUT http://localhost:3000/api/users/[USER_ID] \
 ```
 
 ### DELETE /api/users/:id
+
 ```bash
 curl -X DELETE http://localhost:3000/api/users/[USER_ID]
 ```
@@ -289,4 +317,3 @@ curl -X DELETE http://localhost:3000/api/users/[USER_ID]
 2. Run test script: `node test-mongodb-connection.js`
 3. Check logs: `docker-compose logs mongodb`
 4. Review [MONGODB_DEPENDENCY_CHECKLIST.md](./MONGODB_DEPENDENCY_CHECKLIST.md)
-

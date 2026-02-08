@@ -60,10 +60,12 @@ npm run migrate:status  # (if using migrations)
 ### Issue 1: Local tests pass, but CI/CD fails
 
 **Symptoms:**
+
 - Tests pass locally: `npm run test` ✅
 - GitHub Actions fails: ❌
 
 **Root Causes:**
+
 - Different Node versions locally vs CI
 - Uncommitted changes
 - Environment variables missing
@@ -90,10 +92,12 @@ cat .env  # Verify all required vars are set
 ### Issue 2: Docker build fails in CI but works locally
 
 **Symptoms:**
+
 - `npm run docker:build` works locally
 - GitHub Actions fails at "Build Docker image" step
 
 **Root Causes:**
+
 - `.dockerignore` missing files
 - Node modules cached differently
 - Platform-specific line endings (CRLF vs LF)
@@ -118,6 +122,7 @@ git config --global core.eol lf
 ### Issue 3: Tests fail with database connection errors
 
 **Symptoms:**
+
 - Error: "connect ECONNREFUSED 127.0.0.1:5432"
 - Tests expect real database
 
@@ -144,6 +149,7 @@ npm run test -- --testEnvironment=node
 ### Issue 4: ESLint fails with formatting errors
 
 **Symptoms:**
+
 - Error: "Expected indentation of 2 spaces but found 4"
 - Too many errors to fix manually
 
@@ -166,10 +172,12 @@ npm run format:check
 ### Issue 5: GitHub Actions workflow not triggering
 
 **Symptoms:**
+
 - Push code but Actions don't run
 - No jobs in Actions tab
 
 **Root Causes:**
+
 - Workflow file syntax error
 - Workflow not enabled in settings
 - File not in correct path: `.github/workflows/`
@@ -200,6 +208,7 @@ ls -la .github/workflows/
 ### Issue 6: Secrets not available in workflow
 
 **Symptoms:**
+
 - Error: "variable is undefined"
 - Workflow can't access ${{ secrets.DATABASE_URL }}
 
@@ -226,6 +235,7 @@ permissions:
 ### Issue 7: Coverage thresholds failing
 
 **Symptoms:**
+
 - Error: "Coverage for statements: 65% < 70% threshold"
 - Tests pass individually but fail coverage check
 
@@ -253,6 +263,7 @@ npm run test
 ### Issue 8: Deployment fails with "health check failed"
 
 **Symptoms:**
+
 - Error: "curl: (7) Failed to connect"
 - Application deployed but not accessible
 
@@ -383,6 +394,7 @@ COPY --from=builder /app/node_modules ./node_modules
    - Settings → Notifications → Check "Actions"
 
 2. **Slack integration:**
+
    ```yaml
    - uses: slackapi/slack-github-action@v1
      with:

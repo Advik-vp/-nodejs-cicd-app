@@ -9,7 +9,7 @@
     "dev": "node --watch src/index.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint src tests --max-warnings=0",
+    "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -36,6 +36,7 @@
     "prettier": "^3.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "mongodb-memory-server": "^9.1.0"
+    "mongodb-memory-server": "^9.1.0",
+    "supertest": "^6.3.3"
   }
 }

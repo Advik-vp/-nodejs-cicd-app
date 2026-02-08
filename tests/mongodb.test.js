@@ -1,6 +1,6 @@
 /**
  * MongoDB Integration Tests
- * 
+ *
  * Unit tests for MongoDB operations using MongoDB Memory Server
  */
 
@@ -116,10 +116,7 @@ describe('MongoDB Integration Tests', () => {
     });
 
     test('should count users', async () => {
-      await usersCollection.insertMany([
-        { name: 'User 1' },
-        { name: 'User 2' },
-      ]);
+      await usersCollection.insertMany([{ name: 'User 1' }, { name: 'User 2' }]);
 
       const count = await usersCollection.countDocuments();
       expect(count).toBe(2);

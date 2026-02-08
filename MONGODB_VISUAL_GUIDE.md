@@ -12,6 +12,7 @@
 ## 🎯 Installation Paths
 
 ### Path A: Docker (Recommended - 5 minutes)
+
 ```
 ┌─────────────────────────────────────┐
 │  docker-compose up -d                │
@@ -25,6 +26,7 @@
 ```
 
 ### Path B: Windows Local (10 minutes)
+
 ```
 ┌──────────────────────────────────────────┐
 │  Run PowerShell as Administrator         │
@@ -42,6 +44,7 @@
 ```
 
 ### Path C: macOS/Linux Local (10 minutes)
+
 ```
 ┌──────────────────────────────────────────┐
 │  bash scripts/install-mongodb-unix.sh    │
@@ -86,6 +89,7 @@ nodejs-cicd-app/
 ## 🏗️ Architecture
 
 ### Local Development
+
 ```
 ┌──────────────────────────────────────────┐
 │  Your Computer                           │
@@ -117,6 +121,7 @@ nodejs-cicd-app/
 ```
 
 ### Docker Development
+
 ```
 ┌────────────────────────────────────────────────────┐
 │  Docker Environment (docker-compose)               │
@@ -186,6 +191,7 @@ sample-nodejs-app/
 ## ⏱️ Timeline
 
 ### First Run (10 minutes)
+
 ```
 0:00 - Start
 0:02 - npm install
@@ -196,6 +202,7 @@ sample-nodejs-app/
 ```
 
 ### Full Verification (25 minutes)
+
 ```
 0:00 - Run installation script
 0:05 - npm install
@@ -211,12 +218,14 @@ sample-nodejs-app/
 ## 🔍 Verification Steps
 
 ### Step 1: Check Installation
+
 ```bash
 ❌ node -e "require('mongodb')"     → Error = missing
 ✅ node -e "require('mongodb')"     → No error = installed
 ```
 
 ### Step 2: Test Connection
+
 ```bash
 $ node test-mongodb-connection.js
 
@@ -227,6 +236,7 @@ $ node test-mongodb-connection.js
 ```
 
 ### Step 3: Start Application
+
 ```bash
 $ npm run dev
 
@@ -240,6 +250,7 @@ $ npm run dev
 ```
 
 ### Step 4: Test API
+
 ```bash
 $ curl http://localhost:3000/health
 
@@ -257,14 +268,15 @@ $ curl http://localhost:3000/health
 
 ## 📊 Dependency Versions
 
-| Package | Version | Type | Reason |
-|---------|---------|------|--------|
-| mongodb | ^6.3.0 | Runtime | Official driver |
-| dotenv | ^16.3.1 | Runtime | Config management |
-| @types/node | ^20.0.0 | Dev | Type definitions |
-| mongodb-memory-server | ^9.1.0 | Dev | Testing database |
+| Package               | Version | Type    | Reason            |
+| --------------------- | ------- | ------- | ----------------- |
+| mongodb               | ^6.3.0  | Runtime | Official driver   |
+| dotenv                | ^16.3.1 | Runtime | Config management |
+| @types/node           | ^20.0.0 | Dev     | Type definitions  |
+| mongodb-memory-server | ^9.1.0  | Dev     | Testing database  |
 
 **Version Selection:**
+
 - ✅ Latest stable (6.3.0 as of January 2026)
 - ✅ Long-term support (MongoDB 7.0 LTS)
 - ✅ Security updates (regular patches)
@@ -291,6 +303,7 @@ Plain Text Password
 ```
 
 **Protection Measures:**
+
 - .env in .gitignore (not committed)
 - No hardcoded credentials
 - Environment variable separation
@@ -377,18 +390,21 @@ docker-compose ps                           # Show containers
 ## ✨ What You Can Now Do
 
 ### Immediately
+
 - ✅ Connect to MongoDB from Node.js
 - ✅ Create/Read/Update/Delete (CRUD) operations
 - ✅ Run comprehensive tests
 - ✅ Verify connectivity
 
 ### This Week
+
 - ✅ Deploy with Docker
 - ✅ Implement authentication
 - ✅ Set up backups
 - ✅ Monitor performance
 
 ### This Month
+
 - ✅ Scale horizontally
 - ✅ Implement caching
 - ✅ Add indexes
@@ -398,13 +414,13 @@ docker-compose ps                           # Show containers
 
 ## 📞 Get Help
 
-| Issue | Documentation |
-|-------|---|
+| Issue         | Documentation                                                                  |
+| ------------- | ------------------------------------------------------------------------------ |
 | Can't connect | [MONGODB_SETUP.md](./MONGODB_SETUP.md#section-7-troubleshooting-common-issues) |
-| Need commands | [MONGODB_QUICK_START.md](./MONGODB_QUICK_START.md) |
-| Missing tool | [MONGODB_SETUP.md](./MONGODB_SETUP.md#section-3-installation-steps) |
-| Verify setup | [MONGODB_DEPENDENCY_CHECKLIST.md](./MONGODB_DEPENDENCY_CHECKLIST.md) |
-| Full guide | [MONGODB_SETUP.md](./MONGODB_SETUP.md) |
+| Need commands | [MONGODB_QUICK_START.md](./MONGODB_QUICK_START.md)                             |
+| Missing tool  | [MONGODB_SETUP.md](./MONGODB_SETUP.md#section-3-installation-steps)            |
+| Verify setup  | [MONGODB_DEPENDENCY_CHECKLIST.md](./MONGODB_DEPENDENCY_CHECKLIST.md)           |
+| Full guide    | [MONGODB_SETUP.md](./MONGODB_SETUP.md)                                         |
 
 ---
 
@@ -416,16 +432,19 @@ docker-compose ps                           # Show containers
    - Local macOS/Linux? → Run `bash scripts/install-mongodb-unix.sh`
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Test connection:**
+
    ```bash
    node test-mongodb-connection.js
    ```
 
 4. **Start development:**
+
    ```bash
    npm run dev
    ```
@@ -438,12 +457,12 @@ docker-compose ps                           # Show containers
 
 ## 📚 Documentation Index
 
-| Document | Purpose | Time |
-|----------|---------|------|
-| This file | Visual guide | 5 min read |
-| MONGODB_QUICK_START.md | Commands & quick ref | 5 min read |
-| MONGODB_SETUP.md | Complete guide | 30 min read |
-| MONGODB_DEPENDENCY_CHECKLIST.md | Verification | 10 min check |
+| Document                        | Purpose              | Time         |
+| ------------------------------- | -------------------- | ------------ |
+| This file                       | Visual guide         | 5 min read   |
+| MONGODB_QUICK_START.md          | Commands & quick ref | 5 min read   |
+| MONGODB_SETUP.md                | Complete guide       | 30 min read  |
+| MONGODB_DEPENDENCY_CHECKLIST.md | Verification         | 10 min check |
 
 ---
 
@@ -460,4 +479,3 @@ docker-compose ps                           # Show containers
 │  👉 Start with MONGODB_QUICK_START.md  │
 └─────────────────────────────────────────┘
 ```
-

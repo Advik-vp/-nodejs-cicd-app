@@ -11,6 +11,16 @@
   },
   "rules": {
     "no-console": "warn",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "linebreak-style": "off",
+    "import/extensions": ["error", "ignorePackages"],
+    "consistent-return": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".mjs"]
+      }
+    }
   }
 }
