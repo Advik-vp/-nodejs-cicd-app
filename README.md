@@ -1,6 +1,33 @@
-# CI/CD Pipeline README
+# NodeJS CI/CD App & Cloud Vault
 
-A production-ready Node.js application with **fully automated CI/CD pipeline** using GitHub Actions, Docker, and comprehensive quality gates.
+This is a production-ready Node.js app with a full CI/CD pipeline, now featuring **Cloud Vault** - a secure and creative local file storage system.
+
+## 🚀 Quick Start
+
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    cd frontend && npm install && cd ..
+    ```
+
+2.  **Run Locally (Frontend + Backend)**:
+    ```bash
+    npm run dev
+    ```
+    -   Backend runs on `http://localhost:3000`
+    -   Frontend runs on `http://localhost:5173`
+
+3.  **Build for Production**:
+    ```bash
+    npm run build
+    npm start
+    ```
+
+## features
+
+-   **Cloud Vault**: Secure file upload with drag-and-drop interface.
+-   **Creative UI**: Modern glassmorphism design using React & Vite.
+-   **CI/CD**: Automated pipeline for testing and deployment.
 
 ## 🚀 Quick Start (5 minutes)
 
