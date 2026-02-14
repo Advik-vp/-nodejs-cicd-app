@@ -1,11 +1,19 @@
 # Multi-stage build
-FROM node:20-alpine AS builder
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN npm ci --only=production
+FROM node:20-alpine AS frontend-builder
+
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
 
 # Production stage
 FROM node:20-alpine
@@ -14,8 +22,11 @@ WORKDIR /app
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
-COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --chown=nodejs:nodejs . .
+COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs package*.json ./
+COPY --chown=nodejs:nodejs src ./src
+COPY --chown=nodejs:nodejs frontend ./frontend
+COPY --from=frontend-builder --chown=nodejs:nodejs /app/frontend/dist ./frontend/dist
 
 USER nodejs
 
