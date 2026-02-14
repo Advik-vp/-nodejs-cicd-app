@@ -185,6 +185,7 @@ jobs:
 ### Environment-Specific Configuration
 
 Create separate config files:
+
 ```
 config/
 ├── development.json
@@ -277,7 +278,7 @@ curl -X POST https://metrics.example.com/api/metrics \
   run: npm run migrate:up
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  continue-on-error: false  # Fail if migration fails
+  continue-on-error: false # Fail if migration fails
 
 - name: Backup database
   if: success()
@@ -327,8 +328,8 @@ notify:
         server_port: 465
         username: ${{ secrets.EMAIL_USERNAME }}
         password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: "Pipeline Failed: ${{ github.run_id }}"
-        body: "Check: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        subject: 'Pipeline Failed: ${{ github.run_id }}'
+        body: 'Check: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
 
     - name: PagerDuty alert
       if: failure()
@@ -390,6 +391,7 @@ strategy:
 ### Architecture Decision Records (ADR)
 
 Create `docs/adr/` directory with decision records:
+
 ```
 docs/adr/
 ├── 001-ci-cd-platform.md
@@ -463,13 +465,13 @@ echo "Total cost: $COST_ESTIMATE"
 
 ## Summary of Enhancements
 
-| Enhancement | Complexity | Benefits | Time |
-|-------------|-----------|----------|------|
-| Security Scanning | Medium | Catch vulnerabilities early | +10 min |
-| Blue-Green Deployment | High | Zero-downtime deployments | +30 min |
-| Performance Monitoring | Medium | Track real-world metrics | +15 min |
-| Database Migrations | Medium | Automated schema changes | +20 min |
-| Multi-channel Alerts | Low | Never miss failures | +5 min |
-| Cost Optimization | Low | Reduce CI/CD costs | +5 min |
+| Enhancement            | Complexity | Benefits                    | Time    |
+| ---------------------- | ---------- | --------------------------- | ------- |
+| Security Scanning      | Medium     | Catch vulnerabilities early | +10 min |
+| Blue-Green Deployment  | High       | Zero-downtime deployments   | +30 min |
+| Performance Monitoring | Medium     | Track real-world metrics    | +15 min |
+| Database Migrations    | Medium     | Automated schema changes    | +20 min |
+| Multi-channel Alerts   | Low        | Never miss failures         | +5 min  |
+| Cost Optimization      | Low        | Reduce CI/CD costs          | +5 min  |
 
 Start with security scanning, add deployment strategies, then monitoring as your needs grow.

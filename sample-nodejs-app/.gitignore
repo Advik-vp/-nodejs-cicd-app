@@ -8,3 +8,5 @@ coverage/
 .jest_cache/
 *.log
 .vscode/settings.json
+
+uploads/

@@ -183,11 +183,11 @@ docker exec app-container sh   # Shell into container
 
 ## Deployment Branches
 
-| Branch | Environment | Trigger | Approval |
-|--------|-------------|---------|----------|
-| `develop` | Staging | Auto on push | Automated tests |
-| `main` | Production | Auto on push | Manual approval |
-| `hotfix/*` | Production | Manual trigger | Manual approval |
+| Branch     | Environment | Trigger        | Approval        |
+| ---------- | ----------- | -------------- | --------------- |
+| `develop`  | Staging     | Auto on push   | Automated tests |
+| `main`     | Production  | Auto on push   | Manual approval |
+| `hotfix/*` | Production  | Manual trigger | Manual approval |
 
 ## Monitoring Links
 

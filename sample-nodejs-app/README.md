@@ -1,6 +1,33 @@
-# CI/CD Pipeline README
+# NodeJS CI/CD App & Cloud Vault
 
-A production-ready Node.js application with **fully automated CI/CD pipeline** using GitHub Actions, Docker, and comprehensive quality gates.
+This is a production-ready Node.js app with a full CI/CD pipeline, now featuring **Cloud Vault** - a secure and creative local file storage system.
+
+## 🚀 Quick Start
+
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    cd frontend && npm install && cd ..
+    ```
+
+2.  **Run Locally (Frontend + Backend)**:
+    ```bash
+    npm run dev
+    ```
+    -   Backend runs on `http://localhost:3000`
+    -   Frontend runs on `http://localhost:5173`
+
+3.  **Build for Production**:
+    ```bash
+    npm run build
+    npm start
+    ```
+
+## features
+
+-   **Cloud Vault**: Secure file upload with drag-and-drop interface.
+-   **Creative UI**: Modern glassmorphism design using React & Vite.
+-   **CI/CD**: Automated pipeline for testing and deployment.
 
 ## 🚀 Quick Start (5 minutes)
 
@@ -22,23 +49,27 @@ See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for daily commands.
 ## 📋 Features
 
 ✅ **Automated Quality Checks**
+
 - ESLint + Prettier code style enforcement
 - Jest unit tests with 70% coverage requirement
 - Pre-commit hooks with Husky
 
 ✅ **Secure & Scalable**
+
 - Docker containerization with multi-stage builds
 - GitHub Actions CI/CD with parallel jobs
 - Security scanning (Trivy, npm audit)
 - SonarCloud code quality analysis
 
 ✅ **Deployment Ready**
+
 - Staging & production environments
 - Container image publishing to GHCR
 - Zero-downtime deployment strategies
 - Health checks & automatic rollback
 
 ✅ **Developer Friendly**
+
 - VS Code integration with recommended extensions
 - Local pipeline testing with ACT
 - Comprehensive documentation
@@ -95,19 +126,20 @@ Health checks + Rollback on failure
 
 ## 📚 Documentation
 
-| Document | Purpose |
-|----------|---------|
-| [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Daily commands, quick setup, common issues |
-| [SETUP_GUIDE.md](SETUP_GUIDE.md) | Detailed installation, prerequisites, workflows |
-| [VALIDATION_AND_TROUBLESHOOTING.md](VALIDATION_AND_TROUBLESHOOTING.md) | Debugging, issue solutions, best practices |
-| [ADVANCED_ENHANCEMENTS.md](ADVANCED_ENHANCEMENTS.md) | Security, monitoring, advanced deployments |
-| [CONFIGURATION_REFERENCE.md](CONFIGURATION_REFERENCE.md) | Environment variables, workflow customization |
+| Document                                                               | Purpose                                         |
+| ---------------------------------------------------------------------- | ----------------------------------------------- |
+| [QUICK_REFERENCE.md](QUICK_REFERENCE.md)                               | Daily commands, quick setup, common issues      |
+| [SETUP_GUIDE.md](SETUP_GUIDE.md)                                       | Detailed installation, prerequisites, workflows |
+| [VALIDATION_AND_TROUBLESHOOTING.md](VALIDATION_AND_TROUBLESHOOTING.md) | Debugging, issue solutions, best practices      |
+| [ADVANCED_ENHANCEMENTS.md](ADVANCED_ENHANCEMENTS.md)                   | Security, monitoring, advanced deployments      |
+| [CONFIGURATION_REFERENCE.md](CONFIGURATION_REFERENCE.md)               | Environment variables, workflow customization   |
 
 ---
 
 ## 🔧 Development
 
 ### Prerequisites
+
 - Node.js 20+ ([download](https://nodejs.org/))
 - Docker ([download](https://docker.com))
 - Git ([download](https://git-scm.com))
@@ -197,26 +229,29 @@ docker-compose logs -f app
 
 ### GitHub Actions Workflows
 
-| Workflow | Trigger | Actions |
-|----------|---------|---------|
-| **ci-cd.yml** | Push to main/develop | Lint → Test → Build → Deploy |
-| **docker-publish.yml** | Push to main/tags | Build & publish container image |
-| **code-analysis.yml** | Weekly + PR | SonarCloud & dependency scanning |
+| Workflow               | Trigger              | Actions                          |
+| ---------------------- | -------------------- | -------------------------------- |
+| **ci-cd.yml**          | Push to main/develop | Lint → Test → Build → Deploy     |
+| **docker-publish.yml** | Push to main/tags    | Build & publish container image  |
+| **code-analysis.yml**  | Weekly + PR          | SonarCloud & dependency scanning |
 
 ### Environment Variables
 
 Create `.env` file from template:
+
 ```bash
 cp .env.example .env
 # Edit with your configuration
 ```
 
 Add GitHub Secrets for production:
+
 ```
 Settings → Secrets and variables → Actions → New repository secret
 ```
 
 Required secrets:
+
 - `DATABASE_URL` - Production database connection
 - `API_SECRET` - API authentication key
 - `SLACK_WEBHOOK` - Slack notifications (optional)
@@ -231,19 +266,22 @@ Required secrets:
 ## 🧪 Quality Gates
 
 ### Test Coverage Requirements
+
 ```javascript
-Branches:    70% minimum
-Functions:   70% minimum
-Lines:       70% minimum
-Statements:  70% minimum
+Branches: 70 % minimum;
+Functions: 70 % minimum;
+Lines: 70 % minimum;
+Statements: 70 % minimum;
 ```
 
 ### Linting Standards
+
 - ESLint with Airbnb config
 - Prettier code formatting
 - Pre-commit hooks prevent violations
 
 ### Security Checks
+
 - npm audit (moderate+ severity fails build)
 - Trivy container scanning
 - SonarCloud code analysis
@@ -254,6 +292,7 @@ Statements:  70% minimum
 ## 🔍 Monitoring & Debugging
 
 ### View Pipeline Status
+
 1. Go to **Actions** tab in GitHub
 2. Click workflow run to see details
 3. Click job to see step logs
@@ -295,6 +334,7 @@ curl http://localhost:3000/api/users
 ## 📖 Troubleshooting
 
 See [VALIDATION_AND_TROUBLESHOOTING.md](VALIDATION_AND_TROUBLESHOOTING.md) for:
+
 - Common errors and solutions
 - Debug workflow locally
 - Performance optimization
@@ -315,6 +355,7 @@ Quick issues:
 ## 🎯 Next Steps
 
 1. **Setup** (First time)
+
    ```bash
    bash scripts/quickstart.sh
    ```
@@ -323,6 +364,7 @@ Quick issues:
    - Add DATABASE_URL, API_SECRET, etc.
 
 3. **Create First Branch & PR**
+
    ```bash
    git checkout -b feature/my-feature
    # Make changes
@@ -344,6 +386,7 @@ Quick issues:
 ## 📚 Advanced Features
 
 See [ADVANCED_ENHANCEMENTS.md](ADVANCED_ENHANCEMENTS.md) for:
+
 - 🔒 Security scanning (SAST, DAST, container scanning)
 - 🚀 Deployment strategies (blue-green, canary)
 - 📊 Performance monitoring (Lighthouse, metrics)
@@ -385,6 +428,7 @@ MIT
 ## ✅ Verification Checklist
 
 After setup, verify:
+
 - [ ] `npm run dev` starts the application
 - [ ] `npm run test` passes all tests
 - [ ] `npm run lint` has no errors

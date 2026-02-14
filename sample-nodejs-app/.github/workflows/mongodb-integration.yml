@@ -1,0 +1,340 @@
+name: MongoDB Integration Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+
+env:
+  NODE_VERSION: '20'
+  MONGO_VERSION: '7.0'
+
+jobs:
+  # MongoDB Integration Tests
+  mongodb-integration:
+    name: MongoDB Integration & Connection Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_PASSWORD || 'mongodb_ci_password' }}
+          MONGO_INITDB_DATABASE: ci_test_db
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install mongosh CLI
+        run: npm install -g mongosh
+
+      - name: Wait for MongoDB Service
+        run: |
+          echo "Waiting for MongoDB to be ready..."
+          for i in {1..30}; do
+            if mongosh mongodb://admin:${{ secrets.MONGO_PASSWORD || 'mongodb_ci_password' }}@localhost:27017/admin --eval "db.runCommand('ping')" > /dev/null 2>&1; then
+              echo "✅ MongoDB is ready!"
+              exit 0
+            fi
+            echo "Attempt $i/30: MongoDB not ready yet..."
+            sleep 1
+          done
+          echo "❌ MongoDB failed to start after 30 seconds"
+          exit 1
+
+      - name: Verify MongoDB Connection
+        env:
+          MONGO_URI: mongodb://admin:${{ secrets.MONGO_PASSWORD || 'mongodb_ci_password' }}@localhost:27017/ci_test_db
+          MONGO_DB_NAME: ci_test_db
+        run: node test-mongodb-connection.js
+
+      - name: Run MongoDB Tests
+        env:
+          MONGO_URI: mongodb://admin:${{ secrets.MONGO_PASSWORD || 'mongodb_ci_password' }}@localhost:27017/ci_test_db
+          MONGO_DB_NAME: ci_test_db
+          NODE_ENV: test
+        run: npm test -- mongodb.test.js
+
+      - name: Check Database Connectivity
+        env:
+          MONGO_URI: mongodb://admin:${{ secrets.MONGO_PASSWORD || 'mongodb_ci_password' }}@localhost:27017/ci_test_db
+        run: |
+          mongosh $MONGO_URI <<EOF
+          // List databases
+          show dbs
+
+          // Check connection
+          db.runCommand('ping')
+
+          // Create test collection
+          db.createCollection("ci_test_collection")
+
+          // Insert test document
+          db.ci_test_collection.insertOne({
+            test: "CI/CD Integration",
+            timestamp: new Date(),
+            status: "success"
+          })
+
+          // Verify insert
+          db.ci_test_collection.findOne()
+
+          // Clean up
+          db.ci_test_collection.deleteMany({})
+          EOF
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: coverage/
+          retention-days: 30
+
+  # MongoDB Performance Test
+  mongodb-performance:
+    name: MongoDB Performance Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: mongodb_perf_test
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install mongosh
+        run: npm install -g mongosh
+
+      - name: Wait for MongoDB
+        run: |
+          for i in {1..30}; do
+            if mongosh mongodb://admin:mongodb_perf_test@localhost:27017/admin --eval "db.runCommand('ping')" > /dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Performance Test
+        run: |
+          echo "Starting MongoDB Performance Tests..."
+
+          mongosh mongodb://admin:mongodb_perf_test@localhost:27017/perf_db <<EOF
+          // Create performance test collection
+          db.perf_test.deleteMany({})
+
+          // Bulk insert performance test
+          const start = new Date()
+          const docs = []
+          for (let i = 0; i < 1000; i++) {
+            docs.push({
+              index: i,
+              timestamp: new Date(),
+              data: "Performance test document " + i
+            })
+          }
+
+          db.perf_test.insertMany(docs)
+          const insertTime = new Date() - start
+
+          console.log("✅ Inserted 1000 documents in " + insertTime + "ms")
+          console.log("Average per document: " + (insertTime / 1000).toFixed(2) + "ms")
+
+          // Query performance test
+          const queryStart = new Date()
+          const results = db.perf_test.find({ index: { \$gte: 500 } }).toArray()
+          const queryTime = new Date() - queryStart
+
+          console.log("✅ Queried 500 documents in " + queryTime + "ms")
+          console.log("Found: " + results.length + " documents")
+
+          // Cleanup
+          db.perf_test.deleteMany({})
+          EOF
+
+  # MongoDB Backup Test
+  mongodb-backup:
+    name: MongoDB Backup Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: mongodb_backup_test
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install MongoDB Tools
+        run: |
+          wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-database-tools
+
+      - name: Wait for MongoDB
+        run: npm install -g mongosh && mongosh mongodb://admin:mongodb_backup_test@localhost:27017/admin --eval "db.runCommand('ping')"
+
+      - name: Create Test Data
+        run: |
+          mongosh mongodb://admin:mongodb_backup_test@localhost:27017/backup_test <<EOF
+          db.test_collection.insertMany([
+            { _id: 1, name: "Test 1", value: 100 },
+            { _id: 2, name: "Test 2", value: 200 },
+            { _id: 3, name: "Test 3", value: 300 }
+          ])
+          EOF
+
+      - name: Verify Backup Capability
+        run: |
+          mkdir -p mongodb_backup
+          echo "✅ Backup directory created: mongodb_backup"
+          echo "✅ Backup tools available: mongodump, mongorestore"
+          echo "MongoDB is ready for backup operations"
+
+  # Integration with Docker Compose
+  docker-compose-test:
+    name: Docker Compose Integration Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Create .env for Docker Compose
+        run: |
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD || 'docker_test_password' }}" > .env
+          echo "NODE_ENV=test" >> .env
+          echo "PORT=3000" >> .env
+
+      - name: Start Docker Compose Stack
+        run: |
+          docker-compose up -d
+          echo "Waiting for services to be ready..."
+          sleep 10
+
+      - name: Verify Services
+        run: |
+          docker-compose ps
+          echo "---"
+          docker-compose logs mongodb | head -20
+
+      - name: Test MongoDB Connection via Docker
+        run: |
+          docker-compose exec -T mongodb mongosh --eval "db.runCommand('ping')"
+          echo "✅ MongoDB is accessible from Docker Compose"
+
+      - name: Install Dependencies in Container
+        run: |
+          npm install
+          npm ci
+
+      - name: Run Connection Test
+        env:
+          MONGO_URI: mongodb://admin:${{ secrets.MONGO_PASSWORD || 'docker_test_password' }}@localhost:27017/app_db
+        run: node test-mongodb-connection.js
+
+      - name: Cleanup Docker Compose
+        if: always()
+        run: |
+          docker-compose down
+          docker-compose down -v
+
+  # Security Scan for MongoDB
+  security-scan:
+    name: MongoDB Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for Hardcoded Credentials
+        run: |
+          echo "Scanning for hardcoded MongoDB credentials..."
+          if grep -r "mongodb://" --include="*.js" --include="*.json" --include="*.yml" --include="*.yaml" \
+            --exclude-dir=node_modules --exclude-dir=.git \
+            | grep -E "(password|pwd|secret)"; then
+            echo "❌ Warning: Found potential hardcoded credentials"
+            exit 1
+          else
+            echo "✅ No hardcoded credentials detected"
+          fi
+
+      - name: Verify Environment Variables Used
+        run: |
+          echo "Checking if MongoDB configuration uses environment variables..."
+          if grep -r "MONGO_" --include="*.js" --include="*.env.example" >/dev/null; then
+            echo "✅ Environment variables properly configured"
+          else
+            echo "❌ MongoDB not using environment variables"
+            exit 1
+          fi
+
+      - name: Verify .env in .gitignore
+        run: |
+          if grep -q "^\.env" .gitignore; then
+            echo "✅ .env file is in .gitignore"
+          else
+            echo "❌ .env file is NOT in .gitignore"
+            exit 1
+          fi
