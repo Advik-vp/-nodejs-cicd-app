@@ -208,6 +208,7 @@ npm run docker:run
 # Test application
 curl http://localhost:3000/health
 curl http://localhost:3000/api/users
+curl http://localhost:3000/   # Serves built frontend
 ```
 
 ### Docker Compose (with Database)
